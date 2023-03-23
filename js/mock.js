@@ -1,7 +1,7 @@
 import { getRandomInteger, getRandomArrayElement} from './utils.js';
 import { MAX_COUNT_THUMBNAIL } from './consts.js';
 
-const LikeCoint = {
+const LikeCount = {
   MIN: 15,
   MAX: 200
 };
@@ -9,9 +9,9 @@ const AvatarPicture = {
   MIN: 1,
   MAX: 6
 };
-const CommentCoint = {
-  MIN: 1,
-  MAX: 2
+const CommentCount = {
+  MIN: 0,
+  MAX: 20
 };
 const NAMES = [
   'Лиза',
@@ -49,13 +49,13 @@ const getComment = (_, id) => ({
   name: getRandomArrayElement(NAMES)
 });
 
-const getComments = () => Array.from({length: getRandomInteger(CommentCoint.MIN, CommentCoint.MAX)}, getComment);
+const getComments = () => Array.from({length: getRandomInteger(CommentCount.MIN, CommentCount.MAX)}, getComment);
 
 const getThumbnail = (_, id) => ({
   id: id + 1,
   url: `photos/${id + 1}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomInteger(LikeCoint.MIN, LikeCoint.MAX),
+  likes: getRandomInteger(LikeCount.MIN, LikeCount.MAX),
   comments: getComments()
 });
 
