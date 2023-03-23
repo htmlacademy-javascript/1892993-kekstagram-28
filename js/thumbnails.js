@@ -4,7 +4,7 @@ const thumbnailsContainer = document.querySelector('.js-thumbnails');
 
 let thumbnails = [];
 
-const getThumbnailsTemplate = ({id, url, description, likes, comments}) => `<a href="#" id="${id}" class="picture js-thumbnail">
+const getThumbnailsTemplate = ({id, url, description, likes, comments}) => `<a href="#" data-id="${id}" class="picture js-thumbnail">
   <img class="picture__img" src="${url}" width="182" height="182" alt="${description}">
   <p class="picture__info">
     <span class="picture__comments">${comments.length}</span>
@@ -18,7 +18,7 @@ const onThumbnailsContainerClick = (evt) => {
   const targetThumbnailElement = evt.target.closest('.js-thumbnail');
 
   if (targetThumbnailElement) {
-    const targetThumbnailId = targetThumbnailElement.id;
+    const targetThumbnailId = targetThumbnailElement.dataset.id;
     const targetThumbnailData = thumbnails.find((thumbnail) => thumbnail.id === +targetThumbnailId);
 
     initBigPicture(targetThumbnailData);
