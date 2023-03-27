@@ -9,8 +9,6 @@ const buttonCancelPicture = document.querySelector('.js-button-close');
 const descriptionPictureContainer = document.querySelector('.js-social__caption');
 
 const onDocumentEscKeydown = (evt) => {
-  body.classList.remove('modal-open');
-
   if (isEscapeKey(evt)) {
     destroyBigPicture();
   }
@@ -21,8 +19,9 @@ const closeBigPicture = () => {
   body.classList.remove('modal-open');
 };
 
-const renderBigPictureData = ({url}) => {
+const renderBigPictureData = ({url,likes}) => {
   bigPictureImgElement.src = url;
+  likesCountPicture.innerText = likes;
 };
 
 const addEventsHandlers = () => {
@@ -37,14 +36,11 @@ const removeEventsHandlers = () => {
 
 function destroyBigPicture() {
   bigPictureContainer.classList.add('hidden');
+  body.classList.remove('modal-open');
+
   destroyBigPictureComments();
   removeEventsHandlers();
 }
-
-const getLikesCount = (data) => {
-  likesCountPicture.innerHTML = '';
-  likesCountPicture.append(data);
-};
 
 const addDescriptionPicture = (data) => {
   descriptionPictureContainer.innerHTML = '';
@@ -58,6 +54,5 @@ export const initBigPicture = (data) => {
   renderBigPictureData(data);
   initBigPictureComments(data.comments);
   addEventsHandlers();
-  getLikesCount(data.likes);
   addDescriptionPicture(data.description);
 };

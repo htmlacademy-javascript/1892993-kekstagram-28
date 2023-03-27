@@ -27,7 +27,9 @@ const renderComments = (data) => {
     bigPictureCommentsContainer.insertAdjacentHTML('beforeend', getCommentTemplate(data[i]));
   }
   commentCount.innerHTML = '';
-  commentCount.innerHTML = `${shownComments} из <span class="comments-count">${data.length} комментариев</span>`;
+  if (shownComments > 0) {
+    commentCount.innerHTML = `${shownComments} из <span class="comments-count">${data.length} комментариев</span>`;
+  }
 };
 
 export const initBigPictureComments = (data) => {
