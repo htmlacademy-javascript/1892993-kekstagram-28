@@ -1,6 +1,8 @@
+const SHOW_COMMENTS = 5;
+
 const bigPictureCommentsContainer = document.querySelector ('.social__comments');
-const commentCount = document.querySelector ('.social__comment-count');
 const commentsLoader = document.querySelector ('.comments-loader');
+const commentCount = document.querySelector ('.js-social-comment-count');
 const getCommentTemplate = ({avatar, name, message}) => `<li class="social__comment">
 <img
     class="social__picture"
@@ -9,19 +11,28 @@ const getCommentTemplate = ({avatar, name, message}) => `<li class="social__comm
     width="35" height="35">
 <p class="social__text">${message}</p>
 </li>`;
-let comments = [];
 
-const addCommentList = () => {
+let shownComments = 0;
+
+const renderComments = (data) => {
+  shownComments += SHOW_COMMENTS;
+  if (shownComments >= data.length) {
+    commentsLoader.classList.add('hidden');
+    shownComments = data.length;
+  } else {
+    commentsLoader.classList.remove('hidden');
+  }
   bigPictureCommentsContainer.innerHTML = '';
-  comments.forEach((comment) => bigPictureCommentsContainer.insertAdjacentHTML('beforeend', getCommentTemplate(comment)));
+  for (let i = 0; i < shownComments; i++) {
+    bigPictureCommentsContainer.insertAdjacentHTML('beforeend', getCommentTemplate(data[i]));
+  }
+  commentCount.innerHTML = '';
+  commentCount.innerHTML = `${shownComments} из <span class="comments-count">${data.length} комментариев</span>`;
 };
 
 export const initBigPictureComments = (data) => {
-  comments = data.slice();
-  commentCount.classList.add('hidden');
+  renderComments(data);
   commentsLoader.classList.add('hidden');
-
-  addCommentList();
 };
 
 export const destroyBigPictureComments = () => {

@@ -1,7 +1,7 @@
 import { getThumbnails } from './mock.js';
 
 const getRequestImitation = (cb) =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     setTimeout(() => resolve(cb()), 500);
   });
 
