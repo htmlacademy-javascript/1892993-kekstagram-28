@@ -19,9 +19,10 @@ const closeBigPicture = () => {
   body.classList.remove('modal-open');
 };
 
-const renderBigPictureData = ({url,likes}) => {
+const renderBigPictureData = ({url,likes, description}) => {
   bigPictureImgElement.src = url;
   likesCountPicture.innerText = likes;
+  descriptionPictureContainer.innerText = description;
 };
 
 const addEventsHandlers = () => {
@@ -42,11 +43,6 @@ function destroyBigPicture() {
   removeEventsHandlers();
 }
 
-const addDescriptionPicture = (data) => {
-  descriptionPictureContainer.innerHTML = '';
-  descriptionPictureContainer.append(data);
-};
-
 export const initBigPicture = (data) => {
   bigPictureContainer.classList.remove('hidden');
   body.classList.add('modal-open');
@@ -54,5 +50,4 @@ export const initBigPicture = (data) => {
   renderBigPictureData(data);
   initBigPictureComments(data.comments);
   addEventsHandlers();
-  addDescriptionPicture(data.description);
 };
