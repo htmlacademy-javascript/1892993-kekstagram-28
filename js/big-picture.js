@@ -17,6 +17,8 @@ const onDocumentEscKeydown = (evt) => {
 const closeBigPicture = () => {
   bigPictureContainer.classList.add('hidden');
   body.classList.remove('modal-open');
+
+  destroyBigPictureComments();
 };
 
 const renderBigPictureData = ({url,likes, description}) => {
