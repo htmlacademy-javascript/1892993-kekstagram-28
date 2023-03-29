@@ -13,35 +13,39 @@ const getCommentTemplate = ({avatar, name, message}) => `<li class="social__comm
 </li>`;
 
 let comments = [];
-let shownComments = 0;
+let countShownComments = 0;
 
 const renderComments = () => {
-  shownComments += DRAWING_COMMENTS;
-  if (shownComments >= comments.length) {
+  countShownComments += DRAWING_COMMENTS;
+  if (countShownComments >= comments.length) {
     commentsLoader.classList.add('hidden');
-    shownComments = comments.length;
+    countShownComments = comments.length;
   } else {
     commentsLoader.classList.remove('hidden');
   }
   bigPictureCommentsContainer.innerHTML = '';
-  for (let i = 0; i < shownComments; i++) {
-    bigPictureCommentsContainer.insertAdjacentHTML('beforeend', getCommentTemplate(comments[i]));
-  }
+  const commentsTemplate = comments.slice(0, countShownComments).map((comment) => getCommentTemplate(comment)).join('');
+  bigPictureCommentsContainer.insertAdjacentHTML('beforeend',commentsTemplate);
   commentCount.innerHTML = '';
-  if (shownComments > 0) {
-    commentCount.innerHTML = `${shownComments} из <span class="comments-count">${comments.length} комментариев</span>`;
+  if (countShownComments > 0) {
+    commentCount.innerHTML = `${countShownComments} из <span class="comments-count">${comments.length} комментариев</span>`;
   }
+};
+
+const onCommentsLoaderClick = () => {
+  renderComments();
 };
 
 export const initBigPictureComments = (data) => {
   comments = data.slice();
   renderComments();
-  commentsLoader.addEventListener('click', renderComments);
+  commentsLoader.addEventListener('click', onCommentsLoaderClick);
 };
 
 export const destroyBigPictureComments = () => {
-  commentsLoader.removeEventListener('click', renderComments);
-  shownComments = 0;
+  commentsLoader.removeEventListener('click', onCommentsLoaderClick);
+  countShownComments = 0;
+  comments = [];
 };
 
 
