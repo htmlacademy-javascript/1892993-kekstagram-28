@@ -1,4 +1,4 @@
-const SHOW_COMMENTS = 5;
+const DRAWING_COMMENTS = 5;
 
 const bigPictureCommentsContainer = document.querySelector ('.social__comments');
 const commentsLoader = document.querySelector ('.comments-loader');
@@ -12,32 +12,40 @@ const getCommentTemplate = ({avatar, name, message}) => `<li class="social__comm
 <p class="social__text">${message}</p>
 </li>`;
 
-let shownComments = 0;
+let comments = [];
+let countShownComments = 0;
 
-const renderComments = (data) => {
-  shownComments += SHOW_COMMENTS;
-  if (shownComments >= data.length) {
+const renderComments = () => {
+  countShownComments += DRAWING_COMMENTS;
+  if (countShownComments >= comments.length) {
     commentsLoader.classList.add('hidden');
-    shownComments = data.length;
+    countShownComments = comments.length;
   } else {
     commentsLoader.classList.remove('hidden');
   }
   bigPictureCommentsContainer.innerHTML = '';
-  for (let i = 0; i < shownComments; i++) {
-    bigPictureCommentsContainer.insertAdjacentHTML('beforeend', getCommentTemplate(data[i]));
-  }
+  const commentsTemplate = comments.slice(0, countShownComments).map((comment) => getCommentTemplate(comment)).join('');
+  bigPictureCommentsContainer.insertAdjacentHTML('beforeend',commentsTemplate);
   commentCount.innerHTML = '';
-  if (shownComments > 0) {
-    commentCount.innerHTML = `${shownComments} из <span class="comments-count">${data.length} комментариев</span>`;
+  if (countShownComments > 0) {
+    commentCount.innerHTML = `${countShownComments} из <span class="comments-count">${comments.length} комментариев</span>`;
   }
+};
+
+const onCommentsLoaderClick = () => {
+  renderComments();
 };
 
 export const initBigPictureComments = (data) => {
-  renderComments(data);
-  commentsLoader.classList.add('hidden');
+  comments = data.slice();
+  renderComments();
+  commentsLoader.addEventListener('click', onCommentsLoaderClick);
 };
 
 export const destroyBigPictureComments = () => {
-  // eslint-disable-next-line no-console
-  console.log('destroy');
+  commentsLoader.removeEventListener('click', onCommentsLoaderClick);
+  countShownComments = 0;
+  comments = [];
 };
+
+
