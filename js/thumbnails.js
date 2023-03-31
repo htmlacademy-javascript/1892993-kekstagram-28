@@ -13,13 +13,12 @@ const getThumbnailsTemplate = ({id, url, description, likes, comments}) => `<a h
 </a>`;
 
 const onThumbnailsContainerClick = (evt) => {
-  evt.preventDefault();
-
   const targetThumbnailElement = evt.target.closest('.js-thumbnail');
 
   if (targetThumbnailElement) {
     const targetThumbnailId = targetThumbnailElement.dataset.id;
     const targetThumbnailData = thumbnails.find((thumbnail) => thumbnail.id === +targetThumbnailId);
+    evt.preventDefault();
 
     initBigPicture(targetThumbnailData);
   }
