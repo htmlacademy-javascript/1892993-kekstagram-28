@@ -1,3 +1,5 @@
+import { initEffects, resetEffects } from './effect-image.js';
+import { initScale, resetScale } from './scale.js';
 import { isEscapeKey } from './utils.js';
 
 const TAG_COUNT_MAX = 5;
@@ -9,14 +11,20 @@ const ErrorMessage = {
   BAD_UNIQUE_TAGS: 'Ваши теги повторяются. Проверьте уникальность каждого.',
 };
 
-// Константа с путем к дефолтной картинке
-
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadImageOverlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('#upload-cancel');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
-// элемент картинки
+const uploadImage = document.querySelector('.js-upload-image');
+const loadingPicture = document.querySelector('.img-upload__preview img');
+
+const getImage = () => {
+  const file = uploadImage.files[0];
+  if (file) {
+    loadingPicture.src = URL.createObjectURL(file);
+  }
+};
 
 let isHashtagFieldOrCommentFieldFocus = false;
 
@@ -87,6 +95,8 @@ const openForm = () => {
 function destroyForm() {
   uploadForm.reset();
   pristine.reset();
+  resetScale();
+  resetEffects();
 
   cancelButton.removeEventListener('click', onCancelButtonClick);
   document.removeEventListener('keydown', onDocumentEscKeydown);
@@ -95,10 +105,6 @@ function destroyForm() {
   commentField.removeEventListener('focus', onCommentFieldFocus);
 
   isHashtagFieldOrCommentFieldFocus = false;
-
-  // подставить в src картинки путь к дефолтной картинке
-  // дестроить scale
-  // дестроить effect-image
 }
 
 function closeForm() {
@@ -108,6 +114,8 @@ function closeForm() {
 
 const initForm = () => {
   openForm();
+  initScale();
+  initEffects();
 
   pristine.addValidator(hashtagField, validateTagsPattern, ErrorMessage.BAD_PATTERN);
   pristine.addValidator(hashtagField, validateUniqueTags, ErrorMessage.BAD_UNIQUE_TAGS);
@@ -118,14 +126,7 @@ const initForm = () => {
   uploadForm.addEventListener('submit', onUploadFormSubmit);
   hashtagField.addEventListener('focus', onHashtagFieldFocus);
   commentField.addEventListener('focus', onCommentFieldFocus);
-
-  // подставить в src картинки путь к картинке
-  // инициализировать scale
-  // инициализировать effect-image
+  uploadImage.addEventListener('click', getImage());
 };
 
 export {initForm, uploadForm};
-
-// и не забыть заэкспортить элемент картинки
-// завести модуль scale, который имеет destroy init changeSizeImage
-// завести модуль effect-image, который умеет менять фильтры и инициализирует в себе slider, так же имеет destroy, init, changeEffectImage
