@@ -1,6 +1,4 @@
-
-
-const EFFECTS = [
+const effects = [
   {
     name: 'none',
     style: 'none',
@@ -57,14 +55,14 @@ const EFFECTS = [
   },
 ];
 
-const defaultEffect = EFFECTS[0];
+const defaultEffect = effects[0];
 let chosenEffect = defaultEffect;
 
 const imageElement = document.querySelector('.img-upload__preview img');
 const effectsListElements = document.querySelector('.effects');
 const sliderContainerElement = document.querySelector('.img-upload__effect-level');
-const sliderElement = document.querySelector('.effect-level__slider');
-const effectLevelElement = document.querySelector('.effect-level__value');
+const sliderElement = sliderContainerElement.querySelector('.effect-level__slider');
+const effectLevelElement = sliderContainerElement.querySelector('.effect-level__value');
 
 const isDefault = () => chosenEffect === defaultEffect;
 
@@ -97,7 +95,7 @@ const onEffectsChange = (evt) => {
   if (!evt.target.classList.contains('effects__radio')) {
     return;
   }
-  chosenEffect = EFFECTS.find((effect) => effect.name === evt.target.value);
+  chosenEffect = effects.find((effect) => effect.name === evt.target.value);
   imageElement.className = (`effects__preview--${chosenEffect.name}`);
   updateEffects();
 };
@@ -112,15 +110,9 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-hideSlider();
-
 const onSliderUpdate = () => {
   const sliderValue = sliderElement.noUiSlider.get();
-  if(isDefault()) {
-    imageElement.style.filter = defaultEffect.style;
-  } else {
-    imageElement.style.filter = `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
-  }
+  imageElement.style.filter = isDefault() ? defaultEffect.style : `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
   effectLevelElement.value = sliderValue;
 };
 
@@ -135,4 +127,5 @@ export const resetEffects = () => {
 export const initEffects = () => {
   effectsListElements.addEventListener('change', onEffectsChange);
   sliderElement.noUiSlider.on('update', onSliderUpdate);
+  hideSlider();
 };
