@@ -6,7 +6,7 @@ const TAG_COUNT_MAX = 5;
 const TAG_PATTERN = /^#[a-zа-яё0-9]{1,19}$/i;
 
 const ErrorMessage = {
-  BAD_HASTAGS_LENGTH: 'Ограничение поля - до 5 комментариев. Исправьте количество тегов.',
+  BAD_HASHTAGS_LENGTH: 'Ограничение поля - до 5 комментариев. Исправьте количество тегов.',
   BAD_PATTERN: 'Тег начинается с #. Внутри только латинские буквы, кириллица и числа.',
   BAD_UNIQUE_TAGS: 'Ваши теги повторяются. Проверьте уникальность каждого.',
 };
@@ -18,13 +18,6 @@ const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 const uploadImage = document.querySelector('.js-upload-image');
 const loadingPicture = document.querySelector('.img-upload__preview img');
-
-const getImage = () => {
-  const file = uploadImage.files[0];
-  if (file) {
-    loadingPicture.src = URL.createObjectURL(file);
-  }
-};
 
 let isHashtagFieldOrCommentFieldFocus = false;
 
@@ -55,15 +48,13 @@ const onUploadFormSubmit = (evt) => {
   }
 };
 
-const onCancelButtonClick = () => {
+export const onCancelButtonClick = () => {
   destroyForm();
-  closeForm();
 };
 
 const onDocumentEscKeydown = (evt) => {
   if (isEscapeKey(evt) && !isHashtagFieldOrCommentFieldFocus) {
     destroyForm();
-    closeForm();
   }
 };
 
@@ -87,16 +78,28 @@ const onCommentFieldFocus = () => {
   commentField.addEventListener('blur', onCommentFieldBlur);
 };
 
-const openForm = () => {
+const openForm = (file) => {
+  if (file) {
+    loadingPicture.src = URL.createObjectURL(file);
+  }
   uploadImageOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
 };
 
-function destroyForm() {
-  uploadForm.reset();
+const closeForm = () => {
+  uploadImageOverlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+};
+
+export function destroyForm(withResetFormData = true) {
+  if (withResetFormData) {
+    uploadForm.reset();
+  }
+  uploadImage.value = '';
+  resetScale(withResetFormData);
+  resetEffects(withResetFormData);
   pristine.reset();
-  resetScale();
-  resetEffects();
+  closeForm();
 
   cancelButton.removeEventListener('click', onCancelButtonClick);
   document.removeEventListener('keydown', onDocumentEscKeydown);
@@ -107,26 +110,30 @@ function destroyForm() {
   isHashtagFieldOrCommentFieldFocus = false;
 }
 
-function closeForm() {
-  uploadImageOverlay.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-}
+export const setOnFormSubmit = (cb) => {
+  uploadForm.addEventListener ('submit', async (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
 
-const initForm = () => {
-  openForm();
+    if (isValid) {
+      await cb(new FormData(uploadForm));
+    }
+  });
+};
+
+
+export const initForm = (file) => {
+  openForm(file);
   initScale();
   initEffects();
 
   pristine.addValidator(hashtagField, validateTagsPattern, ErrorMessage.BAD_PATTERN);
   pristine.addValidator(hashtagField, validateUniqueTags, ErrorMessage.BAD_UNIQUE_TAGS);
-  pristine.addValidator(hashtagField, validateTagsLength, ErrorMessage.BAD_HASTAGS_LENGTH);
+  pristine.addValidator(hashtagField, validateTagsLength, ErrorMessage.BAD_HASHTAGS_LENGTH);
 
   cancelButton.addEventListener('click', onCancelButtonClick);
   document.addEventListener('keydown', onDocumentEscKeydown);
   uploadForm.addEventListener('submit', onUploadFormSubmit);
   hashtagField.addEventListener('focus', onHashtagFieldFocus);
   commentField.addEventListener('focus', onCommentFieldFocus);
-  uploadImage.addEventListener('click', getImage());
 };
-
-export {initForm, uploadForm};

@@ -6,7 +6,8 @@ const uploadImageElement = document.querySelector('.js-upload-image');
 
 const onUploadImageElementChange = (evt) => {
   if (RIGHT_FILE_TYPES.includes(evt.target.files[0].type)) {
-    initForm();
+    const file = uploadImageElement.files[0];
+    initForm(file);
   }
 };
 

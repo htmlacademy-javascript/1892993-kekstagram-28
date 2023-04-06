@@ -1,12 +1,99 @@
-export const getRandomInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
+const ALERT_SHOW_TIME = 5000;
+const TIMEOUT_DELAY = 500;
 
-export const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+const successTemplate = document.querySelector('#success');
+const successSection = successTemplate.content.querySelector('.success');
+const successInner = document.querySelector('.success__inner');
+const errorTemplate = document.querySelector('#error');
+const errorSection = errorTemplate.content.querySelector('.error');
+const errorInner = document.querySelector('.error__inner');
 
 export const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export const isMaxLength = (string, length) => string.length <= length;
+export const showAlert = (message) => {
+  const alert = document.createElement('div');
+  alert.style.position = 'absolute';
+  alert.style.zIndex = '100';
+  alert.style.left = '0';
+  alert.style.top = '0';
+  alert.style.right = '0';
+  alert.style.padding = '10px 3px';
+  alert.style.fontSize = '30px';
+  alert.style.textAlign = 'center';
+  alert.style.backgroundColor = 'red';
+  alert.textContent = message;
+  document.body.append(alert);
+
+  setTimeout(() => {
+    alert.remove();
+  }, ALERT_SHOW_TIME);
+};
+
+export const showSuccessMessage = () => {
+  const success = successSection.cloneNode(true);
+  const successButton = success.querySelector('.success__button');
+  successButton.addEventListener('click', () => {
+    success.remove();
+  });
+
+  document.body.append(success);
+
+  const isSuccessInnerFocused = () =>
+    document.activeElement === successInner;
+
+  const clickHandler = () => {
+    if (!isSuccessInnerFocused()) {
+      success.remove();
+      document.removeEventListener('mousedown', clickHandler);
+    }
+  };
+
+  document.addEventListener('keydown', () => {
+    if (isEscapeKey) {
+      success.remove();
+      document.removeEventListener('mousedown', clickHandler);
+    }
+  });
+
+  document.addEventListener('mousedown', clickHandler);
+};
+
+export const showErrorMessage = () => {
+  const error = errorSection.cloneNode(true);
+  const errorButton = error.querySelector('.error__button');
+
+  errorButton.addEventListener('click', () => {
+    error.remove();
+  });
+
+  document.body.append(error);
+
+  const isErrorInnerFocused = () =>
+    document.activeElement === errorInner;
+
+  const clickHandler = () => {
+    if (!isErrorInnerFocused()) {
+      error.remove();
+      document.removeEventListener('mousedown', clickHandler);
+    }
+  };
+
+  document.addEventListener('keydown', () => {
+    if (isEscapeKey) {
+      error.remove();
+      document.removeEventListener('mousedown', clickHandler);
+    }
+  });
+
+  document.addEventListener('mousedown', clickHandler);
+};
+
+export const debounce = (callback, timeoutDelay = TIMEOUT_DELAY) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};

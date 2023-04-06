@@ -38,3 +38,9 @@ export const initThumbnails = (data) => {
   renderThumbnails();
   addClickHandlerToContainer();
 };
+
+export const destroyThumbnails = () => {
+  const thumbnailsElements = thumbnailsContainer.querySelectorAll('.js-thumbnail');
+
+  thumbnailsElements.forEach((thumbnailElement) => thumbnailElement.remove());
+};
