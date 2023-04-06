@@ -1,8 +1,27 @@
-import { getData } from './api.js';
-import { initThumbnails } from './thumbnails.js';
+import { getData, sendData } from './api.js';
 import { initUploadImage } from './upload-image.js';
+import { initFilter } from './filter.js';
+import { destroyForm, setOnFormSubmit } from './form.js';
+import { showAlert, showErrorMessage, showSuccessMessage } from './utils.js';
 
-const data = await getData();
+setOnFormSubmit(async (data) => {
+  try {
+    await sendData(data);
+    showSuccessMessage();
+    destroyForm();
+  } catch (err) {
+    showErrorMessage();
+    destroyForm(false);
+  }
+});
+
 
 initUploadImage();
-initThumbnails(data);
+
+try {
+  const data = await getData();
+  initFilter(data);
+} catch (err) {
+  showAlert(err.message);
+}
+
