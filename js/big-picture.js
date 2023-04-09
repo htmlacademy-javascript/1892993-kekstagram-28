@@ -14,7 +14,7 @@ const onDocumentEscKeydown = (evt) => {
   }
 };
 
-const closeBigPicture = () => {
+const onBigPictureClick = () => {
   bigPictureContainer.classList.add('hidden');
   body.classList.remove('modal-open');
 
@@ -29,12 +29,12 @@ const renderBigPictureData = ({url,likes, description}) => {
 
 const addEventsHandlers = () => {
   document.addEventListener('keydown', onDocumentEscKeydown);
-  buttonCancelPicture.addEventListener('click', closeBigPicture);
+  buttonCancelPicture.addEventListener('click', onBigPictureClick);
 };
 
 const removeEventsHandlers = () => {
   document.removeEventListener('keydown', onDocumentEscKeydown);
-  buttonCancelPicture.removeEventListener('click', closeBigPicture);
+  buttonCancelPicture.removeEventListener('click', onBigPictureClick);
 };
 
 function destroyBigPicture() {

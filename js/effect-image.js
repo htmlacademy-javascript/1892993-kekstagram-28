@@ -1,6 +1,5 @@
-const EFFECTS = [
-  {
-    name: 'none',
+const EFFECTS = {
+  none: {
     style: 'none',
     min: 0,
     max: 100,
@@ -8,8 +7,7 @@ const EFFECTS = [
     step: 1,
     unit: '',
   },
-  {
-    name: 'chrome',
+  chrome: {
     style: 'grayscale',
     min: 0,
     max: 1,
@@ -17,8 +15,7 @@ const EFFECTS = [
     step: 0.1,
     unit: '',
   },
-  {
-    name: 'sepia',
+  sepia: {
     style: 'sepia',
     min: 0,
     max: 1,
@@ -26,8 +23,7 @@ const EFFECTS = [
     step: 0.1,
     unit: '',
   },
-  {
-    name: 'marvin',
+  marvin: {
     style: 'invert',
     min: 0,
     max: 100,
@@ -35,8 +31,7 @@ const EFFECTS = [
     step: 1,
     unit: '%',
   },
-  {
-    name: 'phobos',
+  phobos: {
     style: 'blur',
     min: 0,
     max: 3,
@@ -44,8 +39,7 @@ const EFFECTS = [
     step: 0.1,
     unit: 'px',
   },
-  {
-    name: 'heat',
+  heat: {
     style: 'brightness',
     min: 1,
     max: 3,
@@ -53,9 +47,9 @@ const EFFECTS = [
     step: 0.1,
     unit: '',
   },
-];
+};
 
-const defaultEffect = EFFECTS[0];
+const defaultEffect = EFFECTS.none;
 let chosenEffect = defaultEffect;
 
 const imageElement = document.querySelector('.img-upload__preview img');
@@ -95,7 +89,7 @@ const onEffectsChange = (evt) => {
   if (!evt.target.classList.contains('effects__radio')) {
     return;
   }
-  chosenEffect = EFFECTS.find((effect) => effect.name === evt.target.value);
+  chosenEffect = EFFECTS[evt.target.value];
   imageElement.className = (`effects__preview--${chosenEffect.name}`);
   updateEffects();
 };
@@ -116,12 +110,10 @@ const onSliderUpdate = () => {
   effectLevelElement.value = sliderValue;
 };
 
-export const resetEffects = (withUpdateEffect = true) => {
-  if (withUpdateEffect) {
-    chosenEffect = defaultEffect;
-    imageElement.className = (`effects__preview--${chosenEffect.name}`);
-    updateEffects();
-  }
+export const resetEffects = () => {
+  chosenEffect = defaultEffect;
+  imageElement.className = (`effects__preview--${chosenEffect.name}`);
+  updateEffects();
 
   effectsListElements.removeEventListener('change', onEffectsChange);
 };
