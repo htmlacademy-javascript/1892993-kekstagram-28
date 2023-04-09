@@ -91,13 +91,11 @@ const closeForm = () => {
   document.body.classList.remove('modal-open');
 };
 
-export function destroyForm(withResetFormData = true) {
-  if (withResetFormData) {
-    uploadForm.reset();
-  }
+export function destroyForm() {
+  uploadForm.reset();
   uploadImage.value = '';
-  resetScale(withResetFormData);
-  resetEffects(withResetFormData);
+  resetScale();
+  resetEffects();
   pristine.reset();
   closeForm();
 

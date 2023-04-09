@@ -42,12 +42,9 @@ export const initScale = () => {
   biggerButtonElement.addEventListener('click', onBiggerButtonClick);
 };
 
-export const resetScale = (withResetValue = true) => {
+export const resetScale = () => {
   smallerButtonElement.removeEventListener('click', onSmallerButtonClick);
   biggerButtonElement.removeEventListener('click', onBiggerButtonClick);
-
-  if (withResetValue) {
-    scaleValue = DEFAULT_SCALE;
-  }
+  scaleValue = DEFAULT_SCALE;
 };
 

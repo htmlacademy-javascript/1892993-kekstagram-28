@@ -11,7 +11,6 @@ setOnFormSubmit(async (data) => {
     destroyForm();
   } catch (err) {
     showErrorMessage();
-    destroyForm(false);
   }
 });
 
