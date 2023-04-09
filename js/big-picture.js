@@ -5,7 +5,7 @@ const body = document.querySelector ('body');
 const bigPictureContainer = document.querySelector('.js-big-picture');
 const bigPictureImgElement = bigPictureContainer.querySelector('.js-big-picture-img img');
 const likesCountPicture = document.querySelector('.js-likes-count');
-const buttonCancelPicture = document.querySelector('.js-button-close');
+const buttonCancel = document.querySelector('.js-button-close');
 const descriptionPictureContainer = document.querySelector('.js-social__caption');
 
 const onDocumentEscKeydown = (evt) => {
@@ -14,7 +14,7 @@ const onDocumentEscKeydown = (evt) => {
   }
 };
 
-const onBigPictureClick = () => {
+const onButtonCancelClick = () => {
   bigPictureContainer.classList.add('hidden');
   body.classList.remove('modal-open');
 
@@ -29,12 +29,12 @@ const renderBigPictureData = ({url,likes, description}) => {
 
 const addEventsHandlers = () => {
   document.addEventListener('keydown', onDocumentEscKeydown);
-  buttonCancelPicture.addEventListener('click', onBigPictureClick);
+  buttonCancel.addEventListener('click', onButtonCancelClick);
 };
 
 const removeEventsHandlers = () => {
   document.removeEventListener('keydown', onDocumentEscKeydown);
-  buttonCancelPicture.removeEventListener('click', onBigPictureClick);
+  buttonCancel.removeEventListener('click', onButtonCancelClick);
 };
 
 function destroyBigPicture() {
