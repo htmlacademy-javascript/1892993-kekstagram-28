@@ -18,6 +18,7 @@ const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 const uploadImage = document.querySelector('.js-upload-image');
 const loadingPicture = document.querySelector('.img-upload__preview img');
+const submitButton = document.querySelector('.img-upload__submit');
 
 let isHashtagFieldOrCommentFieldFocus = false;
 
@@ -119,6 +120,17 @@ export const setOnFormSubmit = (cb) => {
   });
 };
 
+export const removeFormListeners = () => {
+  cancelButton.removeEventListener('click', onCancelButtonClick);
+  document.removeEventListener('keydown', onDocumentEscKeydown);
+  submitButton.disabled = true;
+};
+
+export const addFormListeners = () => {
+  cancelButton.addEventListener('click', onCancelButtonClick);
+  document.addEventListener('keydown', onDocumentEscKeydown);
+  submitButton.disabled = false;
+};
 
 export const initForm = (file) => {
   openForm(file);

@@ -1,3 +1,5 @@
+import { addFormListeners } from './form.js';
+
 const ALERT_SHOW_TIME = 5000;
 const TIMEOUT_DELAY = 500;
 
@@ -48,8 +50,8 @@ export const showSuccessMessage = () => {
     }
   };
 
-  document.addEventListener('keydown', () => {
-    if (isEscapeKey) {
+  document.addEventListener('keydown', (evt) => {
+    if (isEscapeKey(evt)) {
       success.remove();
       document.removeEventListener('mousedown', clickHandler);
     }
@@ -64,6 +66,7 @@ export const showErrorMessage = () => {
 
   errorButton.addEventListener('click', () => {
     error.remove();
+    addFormListeners();
   });
 
   document.body.append(error);
@@ -74,13 +77,15 @@ export const showErrorMessage = () => {
   const clickHandler = () => {
     if (!isErrorInnerFocused()) {
       error.remove();
+      addFormListeners();
       document.removeEventListener('mousedown', clickHandler);
     }
   };
 
-  document.addEventListener('keydown', () => {
-    if (isEscapeKey) {
+  document.addEventListener('keydown', (evt) => {
+    if (isEscapeKey(evt)) {
       error.remove();
+      addFormListeners();
       document.removeEventListener('mousedown', clickHandler);
     }
   });
