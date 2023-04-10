@@ -1,7 +1,7 @@
 import { getData, sendData } from './api.js';
 import { initUploadImage } from './upload-image.js';
 import { initFilter } from './filter.js';
-import { destroyForm, setOnFormSubmit } from './form.js';
+import { destroyForm, removeFormListeners, setOnFormSubmit } from './form.js';
 import { showAlert, showErrorMessage, showSuccessMessage } from './utils.js';
 
 setOnFormSubmit(async (data) => {
@@ -10,6 +10,7 @@ setOnFormSubmit(async (data) => {
     showSuccessMessage();
     destroyForm();
   } catch (err) {
+    removeFormListeners();
     showErrorMessage();
   }
 });
